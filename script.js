@@ -1,7 +1,8 @@
 const canvas = document.getElementById('wheelCanvas');
 const ctx = canvas.getContext('2d');
 
-const foods = ["烧腊饭", "猪肚鸡", "自选饭菜", "烤盘饭"]; // 食物列表
+// 初始食物列表
+let foods = ["米饭", "面条", "火锅", "汉堡", "寿司", "猪脚饭"];
 const numSegments = foods.length;
 const anglePerSegment = 2 * Math.PI / numSegments; // 每个扇区的角度
 
@@ -71,6 +72,17 @@ function showResult(rotation) {
     const index = Math.floor((finalAngle / anglePerSegment) + numSegments / 2) % numSegments; // 计算最终选中的食物索引
     document.getElementById('result').textContent = `今晚吃：${foods[index]}`;
 }
+
+// 动态添加食物到列表
+document.getElementById('addFoodButton').addEventListener('click', function() {
+    const newFood = document.getElementById('foodInput').value.trim();  // 获取输入的食物
+    if (newFood && !foods.includes(newFood)) {
+        foods.push(newFood);  // 添加新的食物到列表
+        numSegments = foods.length;  // 更新食物数量
+        drawWheel(rotation);  // 重新绘制转盘
+        document.getElementById('foodInput').value = '';  // 清空输入框
+    }
+});
 
 // 绑定点击事件
 document.getElementById('spinButton').addEventListener('click', spinWheel);
