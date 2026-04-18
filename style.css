@@ -6,14 +6,11 @@
   --muted: #6b7280;
   --primary: #2563eb;
   --primary-hover: #1d4ed8;
-  --success: #16a34a;
   --border: #e5e7eb;
   --shadow: 0 10px 30px rgba(31, 41, 55, 0.08);
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -27,48 +24,35 @@ body {
 }
 
 .app {
-  width: min(92vw, 520px);
+  width: min(92vw, 500px);
   display: grid;
   gap: 14px;
 }
 
-h1 {
-  margin: 0;
-  text-align: center;
-  font-size: 28px;
-}
-
-.wheel-card,
-.add-card {
+.wheel-card, .add-card {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 20px;
+  padding: 24px;
   box-shadow: var(--shadow);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  text-align: center;
 }
 
-/* 结果显示区域 */
 .wheel-display {
-  width: 100%;
-  min-height: 70px;
+  min-height: 60px;
   border: 2px dashed #bfdbfe;
   border-radius: 12px;
   display: grid;
   place-items: center;
   font-size: 24px;
   font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 15px;
-  text-align: center;
+  color: #1e3a8a;
+  margin-bottom: 20px;
 }
 
 #wheelCanvas {
   max-width: 100%;
   height: auto;
-  margin-bottom: 15px;
 }
 
 .primary-btn {
@@ -77,32 +61,28 @@ h1 {
   color: #fff;
   border: none;
   border-radius: 10px;
-  padding: 12px;
+  padding: 14px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
+  margin-top: 15px;
   transition: 0.2s;
 }
 
-.primary-btn:hover {
-  background: var(--primary-hover);
-}
-
-.primary-btn:disabled {
-  opacity: 0.6;
-}
+.primary-btn:hover { background: var(--primary-hover); }
+.primary-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .input-row {
   display: flex;
-  width: 100%;
   gap: 10px;
+  margin-top: 10px;
 }
 
 input {
   flex: 1;
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 10px 12px;
+  padding: 12px;
   outline: none;
 }
 
@@ -110,8 +90,8 @@ input {
   background: #e2e8f0;
   color: #111827;
   border: none;
-  padding: 10px 20px;
   border-radius: 10px;
+  padding: 0 20px;
   font-weight: 600;
   cursor: pointer;
 }
