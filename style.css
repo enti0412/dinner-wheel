@@ -22,7 +22,7 @@ body {
   place-items: center;
   background: linear-gradient(135deg, var(--bg1), var(--bg2));
   color: var(--text);
-  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
   padding: 20px;
 }
 
@@ -35,135 +35,83 @@ body {
 h1 {
   margin: 0;
   text-align: center;
-  font-size: 32px;
-  letter-spacing: 1px;
-}
-
-h2,
-h3 {
-  margin: 0 0 10px;
-  font-size: 16px;
+  font-size: 28px;
 }
 
 .wheel-card,
-.add-card,
-.list-card {
+.add-card {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 16px;
+  padding: 20px;
   box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+/* 结果显示区域 */
 .wheel-display {
-  min-height: 88px;
+  width: 100%;
+  min-height: 70px;
   border: 2px dashed #bfdbfe;
   border-radius: 12px;
   display: grid;
   place-items: center;
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 700;
   color: #0f172a;
-  margin-bottom: 12px;
+  margin-bottom: 15px;
   text-align: center;
-  padding: 8px;
 }
 
-.result-text {
-  margin: 0 0 12px;
-  text-align: center;
-  color: var(--muted);
-}
-
-button {
-  border: none;
-  border-radius: 10px;
-  padding: 10px 14px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: 0.2s ease;
+#wheelCanvas {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 15px;
 }
 
 .primary-btn {
   width: 100%;
   background: var(--primary);
   color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 16px;
   font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
 .primary-btn:hover {
   background: var(--primary-hover);
 }
 
-.primary-btn:disabled,
-button:disabled {
+.primary-btn:disabled {
   opacity: 0.6;
-  cursor: not-allowed;
 }
 
 .input-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
+  width: 100%;
   gap: 10px;
 }
 
 input {
-  width: 100%;
+  flex: 1;
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px 12px;
-  font-size: 15px;
   outline: none;
-}
-
-input:focus {
-  border-color: #93c5fd;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
 #addBtn {
   background: #e2e8f0;
   color: #111827;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
   font-weight: 600;
-}
-
-#addBtn:hover {
-  background: #cbd5e1;
-}
-
-.tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  min-height: 24px;
-}
-
-.tag {
-  background: #eff6ff;
-  color: #1e3a8a;
-  border: 1px solid #bfdbfe;
-  padding: 5px 10px;
-  border-radius: 999px;
-  font-size: 13px;
-}
-
-.picked .tag {
-  background: #ecfdf3;
-  color: #166534;
-  border-color: #bbf7d0;
-}
-
-.empty-tip {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-@media (max-width: 520px) {
-  h1 {
-    font-size: 28px;
-  }
-
-  .wheel-display {
-    font-size: 24px;
-  }
+  cursor: pointer;
 }
