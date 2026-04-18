@@ -36,16 +36,15 @@ function drawWheel(rotation = 0) {
         ctx.fillText(foods[i], x, y);
     }
 
-    // 绘制指针
-    drawPointer(centerX, centerY, rotation);
+    // 绘制固定的指针
+    drawPointer(centerX, centerY);
 }
 
-// 绘制指针
-function drawPointer(centerX, centerY, rotation) {
+// 绘制指针（固定不动）
+function drawPointer(centerX, centerY) {
     const pointerLength = 20;
-    const angle = rotation + Math.PI / 2; // 指针朝向正上方
-    const pointerX = centerX + Math.cos(angle) * (canvas.width / 2 + pointerLength);
-    const pointerY = centerY + Math.sin(angle) * (canvas.width / 2 + pointerLength);
+    const pointerX = centerX;
+    const pointerY = centerY - canvas.width / 2 - pointerLength; // 指针指向顶部
 
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 3;
