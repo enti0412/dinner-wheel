@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 
 // 初始食物列表
 let foods = ["米饭", "面条", "火锅", "汉堡", "寿司", "猪脚饭"];
-const numSegments = foods.length;
+let numSegments = foods.length; // 转盘的扇区数
 const anglePerSegment = 2 * Math.PI / numSegments; // 每个扇区的角度
 
 // 绘制转盘
