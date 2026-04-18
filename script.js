@@ -14,7 +14,7 @@ function drawWheel(rotation = 0) {
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
 
-    // 绘制转盘
+    // 绘制转盘的扇区
     for (let i = 0; i < numSegments; i++) {
         const angleStart = rotation + i * anglePerSegment;
         const angleEnd = rotation + (i + 1) * anglePerSegment;
@@ -25,7 +25,7 @@ function drawWheel(rotation = 0) {
         ctx.lineTo(centerX, centerY);
         ctx.fill();
 
-        // 绘制文本
+        // 绘制食物名称
         ctx.fillStyle = '#000';
         ctx.font = '16px Arial';
         ctx.textAlign = 'center';
@@ -35,6 +35,24 @@ function drawWheel(rotation = 0) {
         const y = centerY + Math.sin(midAngle) * (radius - 50);
         ctx.fillText(foods[i], x, y);
     }
+
+    // 绘制指针
+    drawPointer(centerX, centerY, rotation);
+}
+
+// 绘制指针
+function drawPointer(centerX, centerY, rotation) {
+    const pointerLength = 20;
+    const angle = rotation + Math.PI / 2; // 指针朝向正上方
+    const pointerX = centerX + Math.cos(angle) * (canvas.width / 2 + pointerLength);
+    const pointerY = centerY + Math.sin(angle) * (canvas.width / 2 + pointerLength);
+
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY); // 指针起点
+    ctx.lineTo(pointerX, pointerY); // 指针终点
+    ctx.stroke();
 }
 
 // 动画：转盘旋转
