@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>晚餐吃什么转盘Pro</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <h1>今晚吃什么？</h1>
+
+    <section class="wheel-card">
+      <div id="wheelDisplay" class="wheel-display">点击“开始选择”</div>
+      <p id="resultText" class="result-text">准备好了就开始吧</p>
+      <button id="startBtn" class="primary-btn">开始选择</button>
+    </section>
+
+    <section class="add-card">
+      <h2>添加新食物</h2>
+      <div class="input-row">
+        <input id="foodInput" type="text" placeholder="例如：番茄牛腩面" />
+        <button id="addBtn">加入列表</button>
+      </div>
+    </section>
+
+    <section class="list-card">
+      <h3>待选择（不会重复）</h3>
+      <div id="remainingList" class="tag-list"></div>
+    </section>
+
+    <section class="list-card">
+      <h3>已选中过</h3>
+      <div id="pickedList" class="tag-list picked"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
