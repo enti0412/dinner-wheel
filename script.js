@@ -1,108 +1,133 @@
 const canvas = document.getElementById('wheelCanvas');
 const ctx = canvas.getContext('2d');
+const resultDisplay = document.getElementById('result');
+const foodInput = document.getElementById('foodInput');
+const addBtn = document.getElementById('addFoodButton');
+const spinBtn = document.getElementById('spinButton');
 
-// 初始食物列表
+// 初始数据
 let foods = ["米饭", "面条", "火锅", "汉堡", "寿司", "猪脚饭"];
-let numSegments = foods.length; // 转盘的扇区数
-const anglePerSegment = 2 * Math.PI / numSegments; // 每个扇区的角度
+let rotation = 0; // 当前旋转的总弧度
+let isSpinning = false;
 
-// 绘制转盘
-function drawWheel(rotation = 0) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // 清空画布
+/**
+ * 核心绘制函数
+ */
+function drawWheel() {
+    const n = foods.length;
+    const arc = (Math.PI * 2) / n; // 动态计算每个扇区的角度
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const radius = cx - 20;
 
-    const radius = canvas.width / 2;
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 绘制转盘的扇区
-    for (let i = 0; i < numSegments; i++) {
-        const angleStart = rotation + i * anglePerSegment;
-        const angleEnd = rotation + (i + 1) * anglePerSegment;
+    foods.forEach((food, i) => {
+        const startAngle = rotation + i * arc;
+        const endAngle = rotation + (i + 1) * arc;
 
-        ctx.fillStyle = i % 2 === 0 ? '#f5a623' : '#f6c8a6'; // 设置扇区颜色
+        // 1. 绘制扇区颜色
+        ctx.fillStyle = i % 2 === 0 ? '#60a5fa' : '#93c5fd';
         ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, angleStart, angleEnd);
-        ctx.lineTo(centerX, centerY);
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, radius, startAngle, endAngle);
+        ctx.closePath();
         ctx.fill();
+        
+        // 绘制描边
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
 
-        // 绘制食物名称
-        ctx.fillStyle = '#000';
-        ctx.font = '16px Arial';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        const midAngle = (angleStart + angleEnd) / 2;
-        const x = centerX + Math.cos(midAngle) * (radius - 50); // 调整文本位置
-        const y = centerY + Math.sin(midAngle) * (radius - 50);
-        ctx.fillText(foods[i], x, y);
-    }
+        // 2. 绘制文字
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(startAngle + arc / 2); // 旋转到扇区中间
+        ctx.fillStyle = "white";
+        ctx.font = "bold 18px Arial";
+        ctx.textAlign = "right";
+        ctx.fillText(food, radius - 20, 10);
+        ctx.restore();
+    });
 
-    // 绘制固定的指针
-    drawPointer(centerX, centerY);
-}
-
-// 绘制指针（固定不动）
-function drawPointer(centerX, centerY) {
-    const pointerLength = 20;
-    const pointerX = centerX;
-    const pointerY = centerY - canvas.width / 2 - pointerLength; // 指针指向顶部
-
-    ctx.strokeStyle = 'black';
-    ctx.lineWidth = 3;
+    // 3. 绘制中心装饰圆
+    ctx.fillStyle = "#ffffff";
     ctx.beginPath();
-    ctx.moveTo(centerX, centerY); // 指针起点
-    ctx.lineTo(pointerX, pointerY); // 指针终点
-    ctx.stroke();
+    ctx.arc(cx, cy, 12, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 4. 绘制固定指针（始终在12点钟位置，不随转盘旋转）
+    drawPointer(cx);
 }
 
-// 动画：转盘旋转
-let spinning = false;
-let rotation = 0;
-let spinSpeed = 0;
-const maxSpeed = 0.1; // 最大旋转速度
-const deceleration = 0.0005; // 减速速度
+function drawPointer(cx) {
+    ctx.fillStyle = "#ef4444"; // 红色指针
+    ctx.beginPath();
+    ctx.moveTo(cx, 0);          // 尖端指向最上方
+    ctx.lineTo(cx - 15, 25);
+    ctx.lineTo(cx + 15, 25);
+    ctx.closePath();
+    ctx.fill();
+}
 
-function spinWheel() {
-    if (spinning) return; // 防止按钮重复点击
+/**
+ * 点击开始旋转
+ */
+function spin() {
+    if (isSpinning) return;
+    isSpinning = true;
+    spinBtn.disabled = true;
+    resultDisplay.textContent = "正在选餐...";
 
-    spinning = true;
-    spinSpeed = 0.1; // 初始化旋转速度
+    // 随机初始速度，消除“顺序规律”
+    let velocity = 0.2 + Math.random() * 0.15; 
+    const friction = 0.985; // 模拟摩擦力，让它自然停下
 
-    // 动画循环：每帧更新旋转角度
     function animate() {
-        if (spinSpeed > 0) {
-            rotation += spinSpeed; // 增加旋转角度
-            spinSpeed -= deceleration; // 逐渐减速
-            drawWheel(rotation); // 绘制新的转盘状态
-            requestAnimationFrame(animate); // 继续下一个动画帧
+        if (velocity > 0.002) {
+            rotation += velocity;
+            velocity *= friction; // 速度递减
+            drawWheel();
+            requestAnimationFrame(animate);
         } else {
-            spinning = false;
-            showResult(rotation); // 显示结果
+            isSpinning = false;
+            spinBtn.disabled = false;
+            determineResult();
         }
     }
-
-    animate(); // 启动动画
+    animate();
 }
 
-// 显示结果：计算最终结果并显示
-function showResult(rotation) {
-    const finalAngle = rotation % (2 * Math.PI); // 确保角度在 0 到 2π 之间
-    const index = Math.floor((finalAngle / anglePerSegment) + numSegments / 2) % numSegments; // 计算最终选中的食物索引
-    document.getElementById('result').textContent = `今晚吃：${foods[index]}`;
+/**
+ * 结果判定逻辑（核心修正点）
+ */
+function determineResult() {
+    const n = foods.length;
+    const arc = (Math.PI * 2) / n;
+    
+    /* 原理说明：
+       Canvas默认0度在3点钟方向，我们的指针在12点钟方向（即 1.5 * PI 位置）。
+       我们需要找出哪个扇区在旋转结束后覆盖了 1.5 * PI 这个点。
+    */
+    let normalizedRotation = rotation % (Math.PI * 2);
+    let index = Math.floor((1.5 * Math.PI - normalizedRotation) / arc) % n;
+    
+    if (index < 0) index += n; // 处理负数索引
+
+    resultDisplay.textContent = `今晚吃：${foods[index]}！`;
 }
 
-// 动态添加食物到列表
-document.getElementById('addFoodButton').addEventListener('click', function() {
-    const newFood = document.getElementById('foodInput').value.trim();  // 获取输入的食物
+// 事件监听：添加食物
+addBtn.addEventListener('click', () => {
+    const newFood = foodInput.value.trim();
     if (newFood && !foods.includes(newFood)) {
-        foods.push(newFood);  // 添加新的食物到列表
-        numSegments = foods.length;  // 更新食物数量
-        drawWheel(rotation);  // 重新绘制转盘
-        document.getElementById('foodInput').value = '';  // 清空输入框
+        foods.push(newFood); // 将新食物推入数组
+        foodInput.value = "";
+        drawWheel(); // 重新绘制，此时扇区会自动变多
     }
 });
 
-// 绑定点击事件
-document.getElementById('spinButton').addEventListener('click', spinWheel);
+spinBtn.addEventListener('click', spin);
 
-// 初始化绘制转盘
+// 页面加载后的第一次初始化
 drawWheel();
